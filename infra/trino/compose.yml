@@ -1,0 +1,11 @@
+services:
+  trino:
+    image: trinodb/trino:476
+    container_name: trino
+    restart: on-failure
+    volumes:
+      - ./iceberg.catalog.properties:/etc/trino/catalog/iceberg.properties
+    ports:
+      - "8067:8080" # Trino UI
+    depends_on:
+      - iceberg-rest-catalog

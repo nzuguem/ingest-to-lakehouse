@@ -1,0 +1,20 @@
+version: 3
+
+silent: true
+
+includes:
+  infra:
+    taskfile: ./infra
+    dir: ./infra
+  spark:
+    taskfile: ./Taskfile.spark.yml
+    dir: ./
+
+tasks:
+  simulate-warehouseman-and-salesman:
+    desc: Produce data in Database with Redpanda Connect
+    cmds:
+      - |
+        docker run -it --rm --network ingest-to-lakehouse-infra_default \
+        -v ./redpanda-connect/config.yml:/connect.yaml \
+        redpandadata/connect:4.60 run

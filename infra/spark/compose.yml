@@ -1,0 +1,23 @@
+services:
+  spark-iceberg:
+    image: tabulario/spark-iceberg:3.5.5_1.8.1
+    container_name: spark-iceberg
+    depends_on:
+      - iceberg-rest-catalog
+      - minio
+    environment:
+      AWS_ACCESS_KEY_ID: minio
+      AWS_SECRET_ACCESS_KEY: minio-root
+      AWS_REGION: eu-west-1
+    ports:
+      - "8888:8888" # Notebook
+      - "8087:8080" # Spark Workers UI
+    configs:
+      - source: spark-config
+        target: /opt/spark/conf/spark-defaults.conf
+    volumes:
+      - ../../jobs:/home/iceberg/scripts
+
+configs:
+  spark-config:
+    file: ./spark-defaults.conf

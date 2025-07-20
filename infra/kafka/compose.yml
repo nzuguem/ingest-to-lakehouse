@@ -1,0 +1,4 @@
+include:
+- path: connect.yml
+- path: console.yml
+- path: redpanda.yml

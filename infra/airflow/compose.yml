@@ -1,0 +1,17 @@
+services:
+  airflow:
+    container_name: airflow
+    build:
+      context: ./
+    ports:
+      - "8098:8080" # Web UI
+    environment:
+      AWS_ACCESS_KEY_ID: minio
+      AWS_SECRET_ACCESS_KEY: minio-root
+      AWS_REGION: eu-west-1
+    volumes:
+      - ../../dags:/opt/airflow/dags
+      - ../../jobs:/opt/airflow/spark-jobs
+    depends_on:
+      - postgresql
+    command: bash -c "airflow standalone"

@@ -1,0 +1,79 @@
+version: 3
+
+tasks:
+  create-warehouse-bucket:
+    desc: Create Warehouse Bucket for DataLake.
+    internal: true
+    cmds:
+      - |
+        docker run --rm -it --name create-bucket \
+          --entrypoint "" \
+          --network ingest-to-lakehouse-infra_default \
+          minio/mc:RELEASE.2025-05-21T01-59-54Z \
+          sh -c "
+            mc alias set dockerminio http://minio:9000 minio minio-root;
+            mc mb --region=eu-west-1 dockerminio/warehouse;
+            mc anonymous set public dockerminio/warehouse;
+          "
+
+  create-debezium-pg-connector:
+    desc: Create Debezium Postgresql Connector.
+    cmds:
+      - |
+        docker run --rm -it --name create-debezium-pg-connector \
+        --network ingest-to-lakehouse-infra_default \
+        -v $(pwd)/kafka/connectors:/connectors \
+        curlimages/curl:latest \
+        -X POST http://debezium-connect:8083/connectors \
+        -H "Content-Type: application/json" \
+        -d @/connectors/debezium-pg-connector.json
+
+  create-kafka-iceberg-connector:
+    desc: Create Kafka Iceberg Connector.
+    cmds:
+      - |
+        docker run --rm -it --name create-debezium-pg-connector \
+        --network ingest-to-lakehouse-infra_default \
+        -v $(pwd)/kafka/connectors:/connectors \
+        curlimages/curl:latest \
+        -X PUT http://connect:8083/connectors/IcebergSinkConnector/config \
+        -H 'Content-Type: application/json' \
+        -H 'Accept: application/json' \
+        -d @/connectors/kafka-iceberg-connector.json
+
+  configure-airflow:
+    cmds:
+      - |
+        docker exec -it airflow \
+        airflow connections add spark  --conn-type 'spark'  --conn-host 'spark://spark-iceberg'  --conn-port '7077'
+
+  configure-superset:
+    cmds:
+      - ./superset/setup.sh
+
+  configure:
+    cmds:
+      - task: create-warehouse-bucket
+      - task: create-debezium-pg-connector
+      - task: create-kafka-iceberg-connector
+      - task: configure-superset
+      - task: configure-airflow
+
+  start:
+    desc: Setup Infra.
+    cmd: docker compose up --wait --build --remove-orphans
+    internal: true
+
+  start-and-configure:
+    cmds:
+      - task: start
+      - sleep 10s
+      - task: configure
+
+  stop:
+    desc: Setup Infra.
+    cmd: docker compose stop
+
+  down:
+    desc: Setup Infra.
+    cmd: docker compose down

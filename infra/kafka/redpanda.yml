@@ -1,0 +1,12 @@
+services:
+  redpanda:
+    command:
+      - redpanda
+      - start
+      - --kafka-addr internal://0.0.0.0:9092
+      - --advertise-kafka-addr internal://redpanda:9092
+      - --mode dev-container
+      - --smp 1
+      - --default-log-level=info
+    image: redpandadata/redpanda:v25.1.7
+    container_name: redpanda

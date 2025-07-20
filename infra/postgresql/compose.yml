@@ -1,0 +1,24 @@
+services:
+  postgresql:
+    image: postgres:16.5-alpine
+    container_name: postgresql
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: fruits
+    command: [ "postgres", "-c", "wal_level=logical" ]
+    configs:
+      - source: fruits-init
+        target: /docker-entrypoint-initdb.d/1-fruits-init.sql
+      - source: superset-init
+        target: /docker-entrypoint-initdb.d/2-superset-init.sql
+      - source: kestra-init
+        target: /docker-entrypoint-initdb.d/3-kestra-init.sql
+
+configs:
+  fruits-init:
+    file: ./fruits.sql
+  superset-init:
+    file: ./superset.sql
+  kestra-init:
+    file: ./kestra.sql

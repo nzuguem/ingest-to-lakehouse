@@ -1,0 +1,22 @@
+{
+  "tasks.max": "1",
+  "topics": "debezium-pg.public.fruits",
+  "connector.class": "io.tabular.iceberg.connect.IcebergSinkConnector",
+  "iceberg.catalog.s3.endpoint": "http://minio:9000",
+  "iceberg.catalog.s3.secret-access-key": "minio-root",
+  "iceberg.catalog.s3.access-key-id": "minio",
+  "iceberg.catalog.s3.path-style-access": "true",
+  "iceberg.catalog.uri": "http://iceberg-rest-catalog:8181",
+  "iceberg.catalog.warehouse": "s3://warehouse/",
+  "iceberg.catalog.client.region": "eu-west-1",
+  "iceberg.catalog.type": "rest",
+  "iceberg.control.commit.interval-ms": 60000,
+  "iceberg.tables": "fruits.operations_raw",
+  "iceberg.tables.auto-create-enabled": "true",
+  "iceberg.tables.evolve-schema-enabled": "true",
+  "iceberg.tables.auto-create-props.write.format.default": "parquet",
+  "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+  "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+  "value.converter.schemas.enable": "true",
+  "key.converter.schemas.enable": "false"
+}

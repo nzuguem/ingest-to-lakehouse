@@ -1,0 +1,58 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/guiyomh/features/vim": {},
+    "ghcr.io/devcontainers-extra/features/go-task:1": {},
+    "ghcr.io/devcontainers-extra/features/fzf:1": {},
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "latest"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.defaultFormatter": "EditorConfig.EditorConfig"
+      },
+      "extensions": [
+        "mhutchie.git-graph",
+        "redhat.vscode-yaml",
+        "EditorConfig.EditorConfig",
+        "task.vscode-task",
+        "MS-CEINTL.vscode-language-pack-fr"
+      ]
+    }
+  },
+  "forwardPorts": [
+    8098,
+    8080,
+    9001,
+    8888,
+    8087,
+    8088
+  ],
+  "portsAttributes": {
+    "8098": {
+      "label": "airflow"
+    },
+    "8080": {
+      "label": "redpanda-console-ui"
+    },
+    "9001": {
+      "label": "minio-ui"
+    },
+    "8888": {
+      "label": "spark-notebook-ui"
+    },
+    "8087": {
+      "label": "spark-history-server"
+    },
+    "8088": {
+      "label": "superset-ui"
+    }
+  },
+  "postStartCommand": "bash .devcontainer/scripts/postStartCommand.sh"
+}

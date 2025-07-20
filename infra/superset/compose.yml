@@ -1,0 +1,15 @@
+services:
+  superset:
+    build:
+      context: ./
+    container_name: superset
+    depends_on:
+      - postgresql
+    environment:
+      DATABASE_DB: superset
+      DATABASE_HOST: postgresql
+      DATABASE_PORT: 5432
+      DATABASE_PASSWORD: admin
+      DATABASE_USER: admin
+    ports:
+      - "8088:8088" # Superset UI

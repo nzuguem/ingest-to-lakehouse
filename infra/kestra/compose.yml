@@ -1,0 +1,35 @@
+services:
+  kestra:
+    image: kestra/kestra:v0.23.6
+    user: "root"
+    command: server standalone
+    container_name: kestra
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ../../jobs:/app/storage/main/system/_files
+    environment:
+      KESTRA_CONFIGURATION: |
+        datasources:
+          postgres:
+            url: jdbc:postgresql://postgresql:5432/kestra
+            driverClassName: org.postgresql.Driver
+            username: admin
+            password: admin
+        kestra:  
+          repository:
+            type: postgres
+          storage:
+            type: local
+            local:
+              basePath: "/app/storage"
+          queue:
+            type: postgres
+          tasks:
+            tmpDir:
+              path: /tmp/kestra-wd/tmp
+          url: http://localhost:8080/
+    ports:
+      - "8094:8080"
+      - "8095:8081"
+    depends_on:
+      - postgresql

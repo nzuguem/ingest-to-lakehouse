@@ -1,0 +1,17 @@
+services:
+  console:
+    container_name: redpanda-console
+    image: redpandadata/console:v3.1.2
+    depends_on:
+      - redpanda
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+    configs:
+      - source: console-config
+        target: /tmp/config.yml
+    ports:
+      - "8080:8080" # Redpanda Console UI
+
+configs:
+  console-config:
+    file: ./console-config.yml

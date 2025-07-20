@@ -1,0 +1,13 @@
+name: ingest-to-lakehouse-infra
+
+include:
+# - path: dremio/compose.yml
+- path: superset/compose.yml
+# - path: kestra/compose.yml
+- path: trino/compose.yml
+- path: airflow/compose.yml
+- path: iceberg-rest-catalog/compose.yml
+- path: kafka/compose.yml
+- path: minio/compose.yml
+- path: postgresql/compose.yml
+- path: spark/compose.yml

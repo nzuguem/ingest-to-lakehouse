@@ -1,0 +1,16 @@
+version: 3
+
+tasks:
+  raw-to-bronze-job:
+    desc: Transform raw to bronze.
+    cmds:
+      - |
+        docker exec -it spark-iceberg  \
+        spark-submit /home/iceberg/scripts/raw-to-bronze.job.py
+
+  bronze-to-silver-job:
+    desc: Transform bronze to silver.
+    cmds:
+      - |
+        docker exec -it spark-iceberg  \
+        spark-submit /home/iceberg/scripts/bronze-to-silver.job.py

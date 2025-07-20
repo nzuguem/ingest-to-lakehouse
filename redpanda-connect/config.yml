@@ -1,0 +1,31 @@
+input:
+  generate:
+    interval: 1s
+    mapping: |
+      let fruits = [
+        "Pomme",
+        "Banane",
+        "Mangue",
+        "Orange",
+        "Ananas",
+        "Fraise",
+        "Pastèque",
+        "Kiwi",
+        "Papaye",
+        "Raisin"
+      ]
+      let idx = random_int(min:0, max:9)
+      root.name = $fruits.index($idx)
+      root.quantity = random_int(min:0, max:50)
+
+output:
+  sql_raw:
+    driver: postgres
+    dsn: postgres://admin:admin@postgresql:5432/fruits?sslmode=disable
+    query: |
+      UPDATE Fruits SET quantity = $1 WHERE name = $2;
+    args_mapping: |
+      root = [
+        this.quantity,
+        this.name
+      ]
